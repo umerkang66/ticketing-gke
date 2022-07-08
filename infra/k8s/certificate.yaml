@@ -8,7 +8,7 @@ spec:
   issuerRef:
     # reference to the issuer that we created
     name: letsencrypt-prod
-    kind: Issuer
+    kind: ClusterIssuer
   # this certificate is good for commonName address
   commonName: umerkang.online
   dnsNames:

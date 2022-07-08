@@ -1,7 +1,7 @@
 # tell cert-manager where it should go, to get the certificate
 apiVersion: cert-manager.io/v1
 # this object is defined by cert-manager that is installed by helm
-kind: Issuer
+kind: ClusterIssuer
 metadata:
   # the purpose of this issuer to go to, production version of letsencrypt, so just the name
   name: letsencrypt-prod
@@ -14,7 +14,6 @@ spec:
       # this is not connected to the secret that is created by Certificate k8s obj
       name: letsencrypt-prod
     solvers:
-      - selector: {}
-        http01:
+      - http01:
           ingress:
             class: nginx
