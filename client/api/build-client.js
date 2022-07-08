@@ -16,7 +16,7 @@ const buildClient = ({ req }) => {
     return axios.create({
       // http://SERVICENAME.NAMESPACE.svc.cluster.local
       baseURL:
-        'http://my-release-ingress-nginx-controller.default.svc.cluster.local',
+        'http://ingress-nginx-controller.ingress-nginx.svc.cluster.local',
       headers: req.headers,
     });
   } else {
