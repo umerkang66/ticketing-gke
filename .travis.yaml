@@ -1,13 +1,44 @@
+# Tell what language are we using
+language: node_js
+# which version of node js
+node_js:
+  - '16'
 # because we need docker, and install some tools in further
 sudo: required
 services:
   # we need travis to build our images
   - docker
+env:
+  global:
+    - SHA=$(git rev-parse HEAD)
+    # don't show any prompts, that requires user input
+    - CLOUDSDK_CORE_DISABLE_PROMPTS=1
 before_install:
+  # decrypt the service-account.json file
   - openssl aes-256-cbc -K $encrypted_9f3b5599b056_key -iv $encrypted_9f3b5599b056_iv -in service-account.json.enc -out service-account.json -d
 
   - curl https://sdk.cloud.google.com | bash > /dev/null
   - source $HOME/google-cloud-sdk/path.bash.inc
   - gcloud components update kubectl
   # authorization with gcloud
-  gcloud auth activate-service-account --key-file service-account.json
+  - gcloud auth activate-service-account --key-file service-account.json
+  - gcloud config set project sage-facet-355704
+  - gcloud config set compute/zone us-central1-c
+  - gcloud container clusters get-credentials ticketing-test-cluster
+  # echo will stdout the password, that will be caught by docker command stdin
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+  - npm install --prefix auth
+  - npm install --prefix tickets
+  - npm install --prefix orders
+  - npm install --prefix payments
+scripts:
+  - npm --prefix auth run test:ci
+  - npm --prefix tickets run test:ci
+  - npm --prefix orders run test:ci
+  - npm --prefix payments run test:ci
+deploy:
+  # just run the script
+  provider: script
+  script: bash ./deploy.sh
+  on:
+    branch: master

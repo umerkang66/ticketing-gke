@@ -10,7 +10,7 @@ build:
     push: false
   artifacts:
     # build the images, if source code changes, (not synced), update the images if (synced) source code changes
-    - image: ugulzar4512/auth
+    - image: ugulzar4512/ticketing-auth
       # folder name of auth service
       context: auth
       docker:
@@ -21,7 +21,7 @@ build:
           - src: 'src/**/*.ts'
             # "dest" means where to sync this file to, inside the running container, just take from where the file was found from, and throw it to the corresponding part inside the running container
             dest: .
-    - image: ugulzar4512/client
+    - image: ugulzar4512/ticketing-client
       # folder name of auth service
       context: client
       docker:
@@ -31,7 +31,7 @@ build:
         manual:
           - src: '**/*.js'
             dest: .
-    - image: ugulzar4512/tickets
+    - image: ugulzar4512/ticketing-tickets
       # folder name of tickets service
       context: tickets
       docker:
@@ -41,7 +41,7 @@ build:
         manual:
           - src: 'src/**/*.ts'
             dest: .
-    - image: ugulzar4512/orders
+    - image: ugulzar4512/ticketing-orders
       # folder name of orders service
       context: orders
       docker:
@@ -51,7 +51,7 @@ build:
         manual:
           - src: 'src/**/*.ts'
             dest: .
-    - image: ugulzar4512/expiration
+    - image: ugulzar4512/ticketing-expiration
       context: expiration
       docker:
         dockerfile: Dockerfile
@@ -59,7 +59,7 @@ build:
         manual:
           - src: 'src/**/*.ts'
             dest: .
-    - image: ugulzar4512/payments
+    - image: ugulzar4512/ticketing-payments
       context: payments
       docker:
         dockerfile: Dockerfile

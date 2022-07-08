@@ -1,3 +1,5 @@
+# generate service-account from google IAM
+
 # we have added volume (bind mount) because we want to add service-account.json file inside of container
 docker run -it -v $(pwd):/app ruby:2.4 sh
 # docker run -it -v ${pwd}:/app ruby:2.4 sh --> FOR WINDOWS
