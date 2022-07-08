@@ -1,0 +1,69 @@
+apiVersion: skaffold/v2alpha3
+kind: Config
+deploy:
+  # list out all the different config files that we want to load up in the cluster
+  kubectl:
+    manifests:
+      - ./infra/k8s/*
+build:
+  googleCloudBuild:
+    projectId: ticketing-dev-353110
+  artifacts:
+    # image is build by google cloud build, this name is always the same, except the last is folder name
+    - image: us.gcr.io/ticketing-dev-353110/auth
+      # folder name of auth service
+      context: auth
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        # how to handle image, if any file changes
+        manual:
+          - src: 'src/**/*.ts'
+            # "dest" means where to sync this file to, inside the running container, just take from where the file was found from, and throw it to the corresponding part inside the running container
+            dest: .
+    - image: us.gcr.io/ticketing-dev-353110/client
+      # folder name of auth service
+      context: client
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        # how to handle image, if any file changes
+        manual:
+          - src: '**/*.js'
+            dest: .
+    - image: us.gcr.io/ticketing-dev-353110/tickets
+      # folder name of tickets service
+      context: tickets
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        # how to handle image, if any file changes
+        manual:
+          - src: 'src/**/*.ts'
+            dest: .
+    - image: us.gcr.io/ticketing-dev-353110/orders
+      # folder name of orders service
+      context: orders
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        # how to handle image, if any file changes
+        manual:
+          - src: 'src/**/*.ts'
+            dest: .
+    - image: us.gcr.io/ticketing-dev-353110/expiration
+      context: expiration
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: 'src/**/*.ts'
+            dest: .
+    - image: us.gcr.io/ticketing-dev-353110/payments
+      context: payments
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: 'src/**/*.ts'
+            dest: .

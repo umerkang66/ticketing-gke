@@ -1,0 +1,8 @@
+1) React component of stripe send the users' credit card information to stripe backend
+2) Stripe backend will return a token (authorization token) to the frontend.
+3) Now we will send this token from frontend to our backend payment service
+4) Our backend payment service will send the request to stripe backend to CHARGE some money
+5) We didn't get access to the credit card information
+
+We also have to send API Key to stripe api, so that it can identify our application
+ 

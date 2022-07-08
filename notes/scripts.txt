@@ -1,0 +1,16 @@
+HOST FILE: Mac/Linux: /etc/hosts
+HOST FILE: Windows: C:\Windows\System32\Drivers\etc\hosts
+thisisunsafe
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.2.0/deploy/static/provider/cloud/deploy.yaml
+
+ticketing.dev ip address is coming from loadBalancer networking service of gcp, created by ingress-nginx
+
+# generic secret means this is just all kind of information generic secret
+
+kubectl create secret generic <secret_name> --from-literal=<key>=<value>
+kubectl create secret generic jwt-secret --from-literal JWT_KEY=umer_kang_super_secure_key
+kubectl create secret generic stripe-secret --from-literal STRIPE_KEY=<stripe_secret_key>
+kubectl create secret generic stripe-publishable --from-literal STRIPE_PUBLISHABLE_KEY=<stripe_publishable_key>
+
+# PORT FORWARD BY kubectl
+kubectl port-forward <pod_name> <outside_port>:<pod_clusterIp_port>

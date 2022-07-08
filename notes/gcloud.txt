@@ -1,0 +1,9 @@
+gcloud auth login
+gcloud init
+// only necessary if we have close docker-desktop
+gcloud components install kubectl
+gcloud container clusters get-credentials <cluster_name>
+gcloud auth application-default login
+
+// kubectl is ready
+// enable google cloud build

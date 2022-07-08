@@ -1,0 +1,37 @@
+# we don't have to add in skaffold, because this deployment should not be changed
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: expiration-redis-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: expiration-redis
+  template:
+    metadata:
+      labels:
+        app: expiration-redis
+    spec:
+      containers:
+        - name: expiration-redis
+          # this image is coming from docker hub repository
+          image: redis
+---
+apiVersion: v1
+kind: Service
+metadata:
+  # other micro-services should connect to mongo using this name
+  name: expiration-redis-srv
+spec:
+  selector:
+    app: expiration-redis
+  type: ClusterIP
+  ports:
+    # name is just for logging purposes
+    - name: db
+      protocol: TCP
+      # clusterIP itself has a port
+      port: 6379
+      # container port (pod port)
+      targetPort: 6379

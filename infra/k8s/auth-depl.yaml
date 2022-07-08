@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auth-depl
+spec:
+  replicas: 1
+  # find all the pods, that are labeled with "app: auth"
+  selector:
+    matchLabels:
+      app: auth
+  # tell the k8s master, to create the pods with these configuration
+  template:
+    metadata:
+      # define the label so other k8s objects can access it
+      labels:
+        app: auth
+    spec:
+      containers:
+        # name is just for logging purposes
+        - name: auth
+          image: us.gcr.io/ticketing-dev-353110/auth
+          # envs are from k8s secrets
+          env:
+            # this is going to be the name of variable as it shows up inside of container, so stay consistent
+            - name: JWT_KEY
+              valueFrom:
+                secretKeyRef:
+                  # metadata name of k8s secret
+                  name: jwt-secret
+                  # key inside "jwt-secret"
+                  key: JWT_KEY
+            - name: MONGO_URI
+              value: 'mongodb://auth-mongo-srv:27017/auth'
+---
+# by default this will create clusterIP service, if we didn't specify any type
+apiVersion: v1
+kind: Service
+metadata:
+  name: auth-srv
+spec:
+  # find all the pods that are labeled with "app: auth"
+  selector:
+    app: auth
+  type: ClusterIP
+  ports:
+    - name: auth
+      protocol: TCP
+      # clusterIP itself has a port
+      port: 3000
+      # container port (pod port)
+      targetPort: 3000

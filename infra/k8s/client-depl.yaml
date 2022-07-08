@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: client-depl
+spec:
+  replicas: 1
+  selector:
+    # after creating manage all the pods with label "app: client"
+    matchLabels:
+      app: client
+  template:
+    metadata:
+      # create pod labels that will be selected by client-deployment
+      labels:
+        app: client
+    spec:
+      containers:
+        - name: client
+          image: us.gcr.io/ticketing-dev-353110/client
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: client-srv
+spec:
+  selector:
+    app: client
+  type: ClusterIP
+  ports:
+    - name: client
+      protocol: TCP
+      port: 3000
+      targetPort: 3000

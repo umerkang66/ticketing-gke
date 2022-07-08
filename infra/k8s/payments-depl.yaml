@@ -1,0 +1,65 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: payments-depl
+spec:
+  replicas: 1
+  # find all the pods, that are labeled with "app: payments"
+  selector:
+    matchLabels:
+      app: payments
+  # tell the k8s master, to create the pods with these configuration
+  template:
+    metadata:
+      # define the label so other k8s objects can access it
+      labels:
+        app: payments
+    spec:
+      containers:
+        # name is just for logging purposes
+        - name: payments
+          image: us.gcr.io/ticketing-dev-353110/payments
+          # envs are from k8s secrets
+          env:
+            # this is going to be the name of variable as it shows up inside of container, so stay consistent
+            - name: JWT_KEY
+              valueFrom:
+                secretKeyRef:
+                  # metadata name of k8s secret
+                  name: jwt-secret
+                  # key inside "jwt-secret"
+                  key: JWT_KEY
+            - name: STRIPE_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: stripe-secret
+                  key: STRIPE_KEY
+            - name: MONGO_URI
+              value: 'mongodb://payments-mongo-srv:27017/payments'
+            - name: NATS_URL
+              value: 'http://nats-srv:4222'
+            - name: NATS_CLUSTER_ID
+              value: ticketing
+            - name: NATS_CLIENT_ID
+              # value is same as name of payments pod
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+---
+# by default this will create clusterIP service, if we didn't specify any type
+apiVersion: v1
+kind: Service
+metadata:
+  name: payments-srv
+spec:
+  # find all the pods that are labeled with "app: payments"
+  selector:
+    app: payments
+  type: ClusterIP
+  ports:
+    - name: payments
+      protocol: TCP
+      # clusterIP itself has a port
+      port: 3000
+      # container port (pod port)
+      targetPort: 3000

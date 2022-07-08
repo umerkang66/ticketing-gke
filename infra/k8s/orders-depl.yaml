@@ -1,0 +1,60 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: orders-depl
+spec:
+  replicas: 1
+  # find all the pods, that are labeled with "app: orders"
+  selector:
+    matchLabels:
+      app: orders
+  # tell the k8s master, to create the pods with these configuration
+  template:
+    metadata:
+      # define the label so other k8s objects can access it
+      labels:
+        app: orders
+    spec:
+      containers:
+        # name is just for logging purposes
+        - name: orders
+          image: us.gcr.io/ticketing-dev-353110/orders
+          # envs are from k8s secrets
+          env:
+            # this is going to be the name of variable as it shows up inside of container, so stay consistent
+            - name: JWT_KEY
+              valueFrom:
+                secretKeyRef:
+                  # metadata name of k8s secret
+                  name: jwt-secret
+                  # key inside "jwt-secret"
+                  key: JWT_KEY
+            - name: MONGO_URI
+              value: 'mongodb://orders-mongo-srv:27017/orders'
+            - name: NATS_URL
+              value: 'http://nats-srv:4222'
+            - name: NATS_CLUSTER_ID
+              value: ticketing
+            - name: NATS_CLIENT_ID
+              # value is same as name of orders pod
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+---
+# by default this will create clusterIP service, if we didn't specify any type
+apiVersion: v1
+kind: Service
+metadata:
+  name: orders-srv
+spec:
+  # find all the pods that are labeled with "app: orders"
+  selector:
+    app: orders
+  type: ClusterIP
+  ports:
+    - name: orders
+      protocol: TCP
+      # clusterIP itself has a port
+      port: 3000
+      # container port (pod port)
+      targetPort: 3000
