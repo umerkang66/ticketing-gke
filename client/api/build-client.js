@@ -14,8 +14,9 @@ const buildClient = ({ req }) => {
     // host, and cookies is also available on req.header
 
     return axios.create({
+      // http://SERVICENAME.NAMESPACE.svc.cluster.local
       baseURL:
-        'http://ingress-nginx-controller.ingress-nginx.svc.cluster.local',
+        'http://my-release-ingress-nginx-controller.default.svc.cluster.local',
       headers: req.headers,
     });
   } else {
