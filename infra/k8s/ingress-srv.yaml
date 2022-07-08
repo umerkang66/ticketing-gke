@@ -5,9 +5,61 @@ metadata:
   annotations:
     kubernetes.io/ingress.class: nginx
     nginx.ingress.kubernetes.io/use-regex: 'true'
+    # we have tls certificate, tell the ingress, that we are gonna use this
+    cert-manager.io/cluster-issuer: 'letsencrypt-prod'
+    # always force for https
+    nginx.ingress.kubernetes.io/ssl-redirect: 'true'
 spec:
+  # also tell the rules
+  tls:
+    - hosts:
+        - umerkang.online
+        - www.umerkang.online
+      # secretName is coming from certificate.yaml
+      secretName: umerkang-online
   rules:
     - host: umerkang.online
+      http:
+        paths:
+          - path: /api/users/?(.*)
+            pathType: Prefix
+            backend:
+              service:
+                # this name is coming from auth clusterIP service from auth-depl file
+                name: auth-srv
+                port:
+                  # this is the port of "auth-srv" cluster ip service, which sends the requests to container port 3000
+                  number: 3000
+          - path: /api/tickets/?(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: tickets-srv
+                port:
+                  number: 3000
+          - path: /api/orders/?(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: orders-srv
+                port:
+                  number: 3000
+          - path: /api/payments/?(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: payments-srv
+                port:
+                  number: 3000
+          # this is like a catch all routes, client should be at the last
+          - path: /?(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: client-srv
+                port:
+                  number: 3000
+    - host: www.umerkang.online
       http:
         paths:
           - path: /api/users/?(.*)
