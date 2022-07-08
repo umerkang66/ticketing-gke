@@ -41,3 +41,29 @@ build:
         manual:
           - src: 'src/**/*.ts'
             dest: .
+    - image: ugulzar4512/orders
+      # folder name of orders service
+      context: orders
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        # how to handle image, if any file changes
+        manual:
+          - src: 'src/**/*.ts'
+            dest: .
+    - image: ugulzar4512/expiration
+      context: expiration
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: 'src/**/*.ts'
+            dest: .
+    - image: ugulzar4512/payments
+      context: payments
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: 'src/**/*.ts'
+            dest: .
