@@ -1,10 +1,10 @@
+sudo: required
 # Tell what language are we using
 language: node_js
 # which version of node js
 node_js:
   - '16'
 # because we need docker, and install some tools in further
-sudo: required
 services:
   # we need travis to build our images
   - docker
