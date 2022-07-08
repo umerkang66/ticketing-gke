@@ -4,6 +4,7 @@ language: node_js
 # which version of node js
 node_js:
   - '16'
+dist: ubuntu
 # because we need docker, and install some tools in further
 services:
   # we need travis to build our images
