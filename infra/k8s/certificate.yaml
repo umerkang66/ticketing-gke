@@ -1,0 +1,17 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: umerkang-online-tls
+spec:
+  # where this secret should store after it is created by cert-manager
+  secretName: umerkang-online
+  issuerRef:
+    # reference to the issuer that we created
+    name: letsencrypt-prod
+    kind: ClusterIssuer
+  # this certificate is good for commonName address
+  commonName: umerkang.online
+  dnsNames:
+    # all the domains that should be associated with the certificate
+    - umerkang.online
+    - www.umerkang.online

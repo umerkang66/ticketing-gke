@@ -1,0 +1,19 @@
+# tell cert-manager where it should go, to get the certificate
+apiVersion: cert-manager.io/v1
+# this object is defined by cert-manager that is installed by helm
+kind: ClusterIssuer
+metadata:
+  # the purpose of this issuer to go to, production version of letsencrypt, so just the name
+  name: letsencrypt-prod
+spec:
+  acme:
+    # cert-manager should reach out to this object, to get the certificate
+    server: https://acme-v02.api.letsencrypt.org/directory
+    email: 'ugulzar4512@gmail.com'
+    privateKeySecretRef:
+      # this is not connected to the secret that is created by Certificate k8s obj
+      name: letsencrypt-prod
+    solvers:
+      - http01:
+          ingress:
+            class: nginx

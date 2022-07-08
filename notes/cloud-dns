@@ -1,0 +1,3 @@
+Create Zone with dns name <domain_name>
+A NameServer should have been created with 4 nameservers, add those into name servers of goDaddy
+Create two more record sets, one for <domain_name> that forwards to ip, then other <www.domain_name> that forwards to <domain_name>
