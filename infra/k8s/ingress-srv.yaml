@@ -15,7 +15,7 @@ spec:
     - hosts:
         - umerkang.online
         - www.umerkang.online
-      # secretName is coming from certificate.yaml
+      # secretName is coming from certificate.yaml, here is the tls certificate stored in this secret created by Certificate
       secretName: umerkang-online
   rules:
     - host: umerkang.online
