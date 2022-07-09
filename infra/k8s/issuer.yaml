@@ -1,4 +1,4 @@
-# tell cert-manager where it should go, to get the certificate
+# tell cert-manager where it should go, to get the certificate.
 apiVersion: cert-manager.io/v1
 # this object is defined by cert-manager that is installed by helm
 kind: ClusterIssuer
