@@ -26,7 +26,7 @@ docker push ugulzar4512/ticketing-payments:$SHA
 docker push ugulzar4512/ticketing-expiration:$SHA
 docker push ugulzar4512/ticketing-client:$SHA
 
-
+# if the cluster is starting first time, then there is no image
 kubectl apply -f infra/k8s
 
 # update the images in deployment
