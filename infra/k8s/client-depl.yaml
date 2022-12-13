@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: client
-          image: ugulzar4512/ticketing-client
+          image: ugulzar4512/ticketing-gke-client
 ---
 apiVersion: v1
 kind: Service
