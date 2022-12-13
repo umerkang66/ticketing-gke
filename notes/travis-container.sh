@@ -1,3 +1,4 @@
+# TRAVIS IS NOT REQUIRED NOW
 # generate service-account from google IAM
 
 # we have added volume (bind mount) because we want to add service-account.json file inside of container
