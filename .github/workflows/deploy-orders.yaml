@@ -1,0 +1,42 @@
+# this only runs if changes happens on master, but we will never change the this service on
+# master branch but we will create pull request for it (except for the first time, that time
+# this github action should not be exist)
+name: deploy-orders
+on:
+  push:
+    branches:
+      # whenever we close or merge a pull request in master branch, "push master" will run
+      - master
+    paths:
+      # only run this if orders directory changes
+      - 'orders/**'
+jobs:
+  build:
+    # ubuntu-latest comes with docker preinstalled
+    runs-on: ubuntu-latest
+    steps:
+      # checkout all of the code inside of repo
+      - uses: actions/checkout@v2
+      # build out the image and push to docker hub
+      - run: cd orders && docker build -t ugulzar4512/ticketing-gke-orders .
+      # log into docker
+      - run: docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD"
+        # this env is in same array entry
+        # tell this workflow to load these secrets, these secrets can be accessed directly if we are using it in this file, but we are using it in the environment of docker login command
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+      - run: docker push ugulzar4512/ticketing-gke-orders
+
+      - uses: google-github-actions/setup-gcloud@94337306dda8180d967a56932ceb4ddcf01edae7
+        with:
+          service_account_key: ${{ secrets.GKE_SA_KEY }}
+          project_id: ${{ secrets.GKE_PROJECT }}
+      # Get the GKE credentials so we can deploy to the cluster
+      - uses: google-github-actions/get-gke-credentials@fb08709ba27618c31c09e014e1d8364b02e5042e
+        with:
+          cluster_name: ${{ env.GKE_CLUSTER }}
+          location: ${{ env.GKE_ZONE }}
+          credentials: ${{ secrets.GKE_SA_KEY }}
+
+      - run: kubectl rollout restart deployment orders-depl

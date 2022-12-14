@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: client
-          image: us.gcr.io/development-environment-365009/client
+          image: ugulzar4512/ticketing-gke-client
 ---
 apiVersion: v1
 kind: Service

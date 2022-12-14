@@ -1,0 +1,14 @@
+name: tests-tickets
+on:
+  # only run on pull request of where auth service changes
+  pull_request:
+    paths:
+      - 'tickets/**'
+jobs:
+  build:
+    # create a virtual machine
+    runs-on: ubuntu-latest
+    steps:
+      # take all the code of project
+      - uses: actions/checkout@v2
+      - run: cd tickets && npm install && npm run test:ci
