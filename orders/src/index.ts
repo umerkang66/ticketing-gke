@@ -25,7 +25,7 @@ const start = async () => {
     );
 
     // natsWrapper close event handling
-    // this is necessary because if this service is closed, nats then don't send events (messages) to this service
+    // this is necessary because if this service is closed, nats then don't send events (messages) to this service.
     natsWrapper.client.on('close', () => {
       console.log('Nats connection closed');
       process.exit();
