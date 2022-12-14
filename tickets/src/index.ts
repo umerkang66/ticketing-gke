@@ -21,7 +21,7 @@ const start = async () => {
       process.env.NATS_URL
     );
 
-    // natsWrapper close event handling.
+    // natsWrapper close event handling
     natsWrapper.client.on('close', () => {
       console.log('Nats connection closed');
       process.exit();

@@ -33,7 +33,7 @@ const LandingPage = ({ currentUser, tickets }) => {
   );
 };
 
-// this runs both on server and browser.
+// this runs both on server and browser
 LandingPage.getInitialProps = async (context, client, currentUser) => {
   const { data } = await client
     .get('/api/tickets')
