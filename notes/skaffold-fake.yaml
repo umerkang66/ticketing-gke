@@ -5,12 +5,13 @@ deploy:
   kubectl:
     manifests:
       - ./infra/k8s/*
+      - ./infra/k8s-dev/*
 build:
-  googleCloudBuild:
-    projectId: ticketing-dev-353110
+  local:
+    push: false
   artifacts:
-    # image is build by google cloud build, this name is always the same, except the last is folder name
-    - image: us.gcr.io/ticketing-dev-353110/auth
+    # build the images, if source code changes, (not synced), update the images if (synced) source code changes
+    - image: ugulzar4512/ticketing-gke-auth
       # folder name of auth service
       context: auth
       docker:
@@ -21,7 +22,7 @@ build:
           - src: 'src/**/*.ts'
             # "dest" means where to sync this file to, inside the running container, just take from where the file was found from, and throw it to the corresponding part inside the running container
             dest: .
-    - image: us.gcr.io/ticketing-dev-353110/client
+    - image: ugulzar4512/ticketing-gke-client
       # folder name of auth service
       context: client
       docker:
@@ -31,7 +32,7 @@ build:
         manual:
           - src: '**/*.js'
             dest: .
-    - image: us.gcr.io/ticketing-dev-353110/tickets
+    - image: ugulzar4512/ticketing-gke-tickets
       # folder name of tickets service
       context: tickets
       docker:
@@ -41,7 +42,7 @@ build:
         manual:
           - src: 'src/**/*.ts'
             dest: .
-    - image: us.gcr.io/ticketing-dev-353110/orders
+    - image: ugulzar4512/ticketing-gke-orders
       # folder name of orders service
       context: orders
       docker:
@@ -51,7 +52,7 @@ build:
         manual:
           - src: 'src/**/*.ts'
             dest: .
-    - image: us.gcr.io/ticketing-dev-353110/expiration
+    - image: ugulzar4512/ticketing-gke-expiration
       context: expiration
       docker:
         dockerfile: Dockerfile
@@ -59,7 +60,7 @@ build:
         manual:
           - src: 'src/**/*.ts'
             dest: .
-    - image: us.gcr.io/ticketing-dev-353110/payments
+    - image: ugulzar4512/ticketing-gke-payments
       context: payments
       docker:
         dockerfile: Dockerfile

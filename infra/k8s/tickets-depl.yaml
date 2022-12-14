@@ -18,7 +18,7 @@ spec:
       containers:
         # name is just for logging purposes
         - name: tickets
-          image: ugulzar4512/ticketing-gke-tickets
+          image: us.gcr.io/development-environment-365009/tickets
           # envs are from k8s secrets
           env:
             # this is going to be the name of variable as it shows up inside of container, so stay consistent

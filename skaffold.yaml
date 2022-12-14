@@ -7,11 +7,11 @@ deploy:
       - ./infra/k8s/*
       - ./infra/k8s-dev/*
 build:
-  local:
-    push: false
+  googleCloudBuild:
+    projectId: development-environment-365009
   artifacts:
-    # build the images, if source code changes, (not synced), update the images if (synced) source code changes
-    - image: ugulzar4512/ticketing-gke-auth
+    # image is build by google cloud build, this name is always the same, except the last is folder name
+    - image: us.gcr.io/development-environment-365009/auth
       # folder name of auth service
       context: auth
       docker:
@@ -22,7 +22,7 @@ build:
           - src: 'src/**/*.ts'
             # "dest" means where to sync this file to, inside the running container, just take from where the file was found from, and throw it to the corresponding part inside the running container
             dest: .
-    - image: ugulzar4512/ticketing-gke-client
+    - image: us.gcr.io/development-environment-365009/client
       # folder name of auth service
       context: client
       docker:
@@ -32,7 +32,7 @@ build:
         manual:
           - src: '**/*.js'
             dest: .
-    - image: ugulzar4512/ticketing-gke-tickets
+    - image: us.gcr.io/development-environment-365009/tickets
       # folder name of tickets service
       context: tickets
       docker:
@@ -42,7 +42,7 @@ build:
         manual:
           - src: 'src/**/*.ts'
             dest: .
-    - image: ugulzar4512/ticketing-gke-orders
+    - image: us.gcr.io/development-environment-365009/orders
       # folder name of orders service
       context: orders
       docker:
@@ -52,7 +52,7 @@ build:
         manual:
           - src: 'src/**/*.ts'
             dest: .
-    - image: ugulzar4512/ticketing-gke-expiration
+    - image: us.gcr.io/development-environment-365009/expiration
       context: expiration
       docker:
         dockerfile: Dockerfile
@@ -60,7 +60,7 @@ build:
         manual:
           - src: 'src/**/*.ts'
             dest: .
-    - image: ugulzar4512/ticketing-gke-payments
+    - image: us.gcr.io/development-environment-365009/payments
       context: payments
       docker:
         dockerfile: Dockerfile
