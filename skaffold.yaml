@@ -15,7 +15,7 @@ build:
       # folder name of auth service
       context: auth
       docker:
-        dockerfile: Dockerfile
+        dockerfile: Dockerfile.dev
       sync:
         # how to handle image, if any file changes
         manual:
@@ -26,7 +26,7 @@ build:
       # folder name of auth service
       context: client
       docker:
-        dockerfile: Dockerfile
+        dockerfile: Dockerfile.dev
       sync:
         # how to handle image, if any file changes
         manual:
@@ -36,7 +36,7 @@ build:
       # folder name of tickets service
       context: tickets
       docker:
-        dockerfile: Dockerfile
+        dockerfile: Dockerfile.dev
       sync:
         # how to handle image, if any file changes
         manual:
@@ -46,7 +46,7 @@ build:
       # folder name of orders service
       context: orders
       docker:
-        dockerfile: Dockerfile
+        dockerfile: Dockerfile.dev
       sync:
         # how to handle image, if any file changes
         manual:
@@ -55,7 +55,7 @@ build:
     - image: us.gcr.io/development-environment-365009/expiration
       context: expiration
       docker:
-        dockerfile: Dockerfile
+        dockerfile: Dockerfile.dev
       sync:
         manual:
           - src: 'src/**/*.ts'
@@ -63,7 +63,7 @@ build:
     - image: us.gcr.io/development-environment-365009/payments
       context: payments
       docker:
-        dockerfile: Dockerfile
+        dockerfile: Dockerfile.dev
       sync:
         manual:
           - src: 'src/**/*.ts'
